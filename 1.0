@@ -1,0 +1,113 @@
+//AUTHOR: [‎5/‎31/‎2018 7:29 AM]  Griffin J Saiia
+
+ 
+
+import os 
+2 import sys 
+3 import numpy as np 
+4 
+ 
+5 teamSize = 5 
+6 
+ 
+7 def getNoOfClusters(listing, teamSize): 
+8 	 totalPeople = len(listing) 
+9 	 n = len(listing)/teamSize 
+10 	 m = len(listing)/teamSize 
+11 	 if(n == m): 
+12 		 return n 
+13 
+ 
+14  	 else: 
+15 		 if(teamSize == 5): 
+16 		 	teamSize = 6 
+17 		 	getNoOfClusters(listing,teamSize) 
+18 	 	 else: 
+19 		 	return n + 1 
+20 
+ 
+21 def dist(new, centroid): 
+22 	 return ((centroid - new) ** 2) 
+23 
+ 
+24 def allocateTeams(clusters, centers, listing): 
+25 	 for each in listing: 
+26 		cut = listing.split(' ') 
+27 		weight = cut[1] 
+28 		name = cut[0] 
+29 	 	min = 10 
+30 		nm = 0 
+31 		i = 0 
+32 	 	for center in centers: 
+33 			d = dist(weight, center) 
+34 		 	if (d < min & (len(cluster[i]) < teamSize)): 
+35 				min = d 
+36 				nm = i 
+37 			i += 1 
+38 		clusters[i].append(listing) 
+39 		centers[i] = recenter(centers[i], clusters[i]) 
+40 
+ 
+41 def maxDeviation(clusters): 
+42 	 maxAve = 0 
+43 	 for cluster in clusters: 
+44 		 total = 0 
+45 		 for member in cluster: 
+46 			 cut = member.split(' ') 
+47 			 weight = cut[1] 
+48 			 total += weight 
+49 		 ave = (total+0.0) / len(cluster) 
+50 		 if(ave > maxAve): 
+51 			 maxAve = ave 
+52 	 return maxAve 
+53 
+ 
+54 def recenter(i, center, cluster): 
+55 	ave = 0 
+56 	for entry in cluster: 
+57 		cut = entry.split(' ') 
+58 		weight = cut[1] 
+59 		ave += weight 
+60 	return (ave+0.0)/len(cluster) 
+61 
+ 
+62 def cleanUpClusters(clusters): 
+63 	for cluster in cluster: 
+64 		team = [] 
+65 		for entry in cluster: 
+66 			cut = entry.split(' ') 
+67 			name = cut[0] 
+68 			team.append(name) 
+69 		cluster = team 
+70 
+ 
+71 def main(): 
+72 	print "welcome to 'random' tug o' war team generator" 
+73  	line = " " 
+74  	listing = [] 
+75  	clusters = [] 
+76  	while line != "done": 
+77  		line = raw_input("please enter a name and a weight or done: ") 
+78 		listing.append(line) 
+79 	i = 0 
+80 	while(i < getNoOfClusters(listing, teamSize)): 
+81 		clusters.append([]) 
+82  	centers = np.zeros(getNoOfClusters(listing, teamSize)) 
+83 	allocateTeams(clusters, centers, listing) 
+84  	deviation = maxDeviation(clusters) 
+85 	while(deviation > 2): 
+86 		allocateTeams(clusters, centers, listing) 
+87 		deviation = maxDeviation(clusters) 
+88 	cleanUpClusters(clusters) 
+89 	print clusters 
+90 
+ 
+91 if __name__ == '__main__': 
+92 	try: 
+93     	main() 
+94 	except KeyboardInterrupt: 
+95     	print 'Interrupted' 
+96         try: 
+97             sys.exit(0) 
+98         except SystemExit: 
+99             os._exit(0) 
